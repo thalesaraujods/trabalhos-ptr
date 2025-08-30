@@ -10,7 +10,7 @@ static int same_shape(const Matrix* a, const Matrix* b) {
     return (a->rows == b->rows) && (a->cols == b->cols);
 }
 
-// - OPERACOES: CRIAR, DESTRUIR, IMPRIMIR
+// - OPERACOES MATRIZ: CRIAR, DESTRUIR, IMPRIMIR
 Matrix* create_matrix(int rows, int cols) {
     if (rows <= 0 || cols <= 0) return NULL;
 
@@ -66,7 +66,7 @@ void print_matrix(Matrix* m) {
     }
 }
 
-// - OPERACOES: SOMAR, SUBTRAIR, MULTIPLICAR
+// - OPERACOES ENTRE MATRIZES: SOMAR, SUBTRAIR, MULTIPLICAR
 Matrix* add_matrix(const Matrix* a, const Matrix* b) {
     // validações básicas
     if (!same_shape(a, b)) {
@@ -136,5 +136,51 @@ Matrix* mul_matrix(const Matrix* a, const Matrix* b) {
             c->data[i][j] = sum;
         }
     }
+    return c;
+}
+
+// - OPERACOES COM ESCALAR: SOMAR, SUBTRAIR, MULTIPLICAR
+Matrix* add_scalar_matrix(const Matrix* a, double scalar) {
+    if (!a) {
+        fprintf(stderr, "add_scalar_matrix: matriz nula.\n");
+        return NULL;
+    }
+    Matrix* c = create_matrix(a->rows, a->cols);
+    if (!c) return NULL;
+
+    for (int i = 0; i < a->rows; ++i)
+        for (int j = 0; j < a->cols; ++j)
+            c->data[i][j] = a->data[i][j] + scalar;
+
+    return c;
+}
+
+Matrix* sub_scalar_matrix(const Matrix* a, double scalar) {
+    if (!a) {
+        fprintf(stderr, "sub_scalar_matrix: matriz nula.\n");
+        return NULL;
+    }
+    Matrix* c = create_matrix(a->rows, a->cols);
+    if (!c) return NULL;
+
+    for (int i = 0; i < a->rows; ++i)
+        for (int j = 0; j < a->cols; ++j)
+            c->data[i][j] = a->data[i][j] - scalar;
+
+    return c;
+}
+
+Matrix* mul_scalar_matrix(const Matrix* a, double scalar) {
+    if (!a) {
+        fprintf(stderr, "mul_scalar_matrix: matriz nula.\n");
+        return NULL;
+    }
+    Matrix* c = create_matrix(a->rows, a->cols);
+    if (!c) return NULL;
+
+    for (int i = 0; i < a->rows; ++i)
+        for (int j = 0; j < a->cols; ++j)
+            c->data[i][j] = a->data[i][j] * scalar;
+
     return c;
 }

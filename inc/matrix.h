@@ -8,14 +8,19 @@ typedef struct {
     double** data;
 } Matrix;
 
-// - OPERACOES: CRIAR, DESTRUIR, IMPRIMIR
+// - OPERACOES MATRIZ: CRIAR, DESTRUIR, IMPRIMIR
 Matrix* create_matrix(int rows, int cols);
 void destroy_matrix(Matrix** mat);
 void print_matrix(Matrix* m);
 
-// - OPERACOES: SOMAR, SUBTRAIR, MULTIPLICAR
+// - OPERACOES ENTRE MATRIZES: SOMAR, SUBTRAIR, MULTIPLICAR
 Matrix* add_matrix(const Matrix* a, const Matrix* b);
 Matrix* sub_matrix(const Matrix* a, const Matrix* b);
 Matrix* mul_matrix(const Matrix* a, const Matrix* b);
+
+// - OPERACOES COM ESCALAR: SOMAR, SUBTRAIR, MULTIPLICAR
+Matrix* add_scalar_matrix(const Matrix* a, double scalar);
+Matrix* sub_scalar_matrix(const Matrix* a, double scalar);
+Matrix* mul_scalar_matrix(const Matrix* a, double scalar);
 
 #endif 

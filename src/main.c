@@ -25,6 +25,12 @@ int main() {
     Matrix* Csub = sub_matrix(A, B);
     Matrix* Cmul = mul_matrix(A, D);
 
+    // --- operações com escalar ---
+    double s1 = 5.0, s2 = 2.0, s3 = 3.0;
+    Matrix* Cadd_scalar = add_scalar_matrix(A, s1); // A + 5
+    Matrix* Csub_scalar = sub_scalar_matrix(A, s2); // A - 2
+    Matrix* Cmul_scalar = mul_scalar_matrix(A, s3); // A * 3
+
     printf("------- MATRIZ A -------\n");
     print_matrix(A);
     printf("\n");
@@ -49,7 +55,17 @@ int main() {
     printf("A x D:\n"); print_matrix(Cmul);
     printf("\n");
 
+    printf("------- TESTE 4: soma com escalar -------\n");
+    printf("A + %.2f:\n", s1); print_matrix(Cadd_scalar); printf("\n");
+
+    printf("------- TESTE 5: subtracao com escalar -------\n");
+    printf("A - %.2f:\n", s2); print_matrix(Csub_scalar); printf("\n");
+
+    printf("------- TESTE 6: multiplicacao por escalar -------\n");
+    printf("A * %.2f:\n", s3); print_matrix(Cmul_scalar); printf("\n");
+
     destroy_matrix(&A); destroy_matrix(&B); destroy_matrix(&D);
     destroy_matrix(&Cadd); destroy_matrix(&Csub); destroy_matrix(&Cmul);
-    return 0;   
+    destroy_matrix(&Cadd_scalar); destroy_matrix(&Csub_scalar); destroy_matrix(&Cmul_scalar);
+    return 0;     
 }
