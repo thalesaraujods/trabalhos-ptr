@@ -11,4 +11,7 @@ Matrix* create_matrix(int rows, int cols);
 void destroy_matrix(Matrix** mat);
 void print_matrix(Matrix* m);
 
+// SOMA
+Matrix* add_matrix(const Matrix* a, const Matrix* b);
+
 #endif 

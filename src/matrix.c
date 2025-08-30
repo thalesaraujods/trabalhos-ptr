@@ -4,6 +4,12 @@
 #include <string.h>
 #include <math.h>
 
+// Função auxiliar: verifica se duas matrizes têm o mesmo formato
+static int same_shape(const Matrix* a, const Matrix* b) {
+    if (a == NULL || b == NULL) return 0;
+    return (a->rows == b->rows) && (a->cols == b->cols);
+}
+
 Matrix* create_matrix(int rows, int cols) {
     if (rows <= 0 || cols <= 0) return NULL;
 
@@ -57,4 +63,27 @@ void print_matrix(Matrix* m) {
         }
         printf("\n");
     }
+}
+
+Matrix* add_matrix(const Matrix* a, const Matrix* b) {
+    // validações básicas
+    if (!same_shape(a, b)) {
+        fprintf(stderr, "add_matrix: dimensoes incompativeis ou matriz nula.\n");
+        return NULL;
+    }
+
+    // cria matriz resultado com mesmas dimensões
+    Matrix* c = create_matrix(a->rows, a->cols);
+    if (!c) {
+        fprintf(stderr, "add_matrix: falha ao alocar matriz resultado.\n");
+        return NULL;
+    }
+
+    // soma elemento a elemento
+    for (int i = 0; i < a->rows; ++i) {
+        for (int j = 0; j < a->cols; ++j) {
+            c->data[i][j] = a->data[i][j] + b->data[i][j];
+        }
+    }
+    return c;
 }
