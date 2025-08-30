@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-// Função auxiliar: verifica se duas matrizes têm o mesmo formato
+// Função auxiliar: verifica se duas matrizes têm o mesmo formatogit 
 static int same_shape(const Matrix* a, const Matrix* b) {
     if (a == NULL || b == NULL) return 0;
     return (a->rows == b->rows) && (a->cols == b->cols);
