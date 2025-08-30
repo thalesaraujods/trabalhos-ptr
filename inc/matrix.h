@@ -23,4 +23,7 @@ Matrix* add_scalar_matrix(const Matrix* a, double scalar);
 Matrix* sub_scalar_matrix(const Matrix* a, double scalar);
 Matrix* mul_scalar_matrix(const Matrix* a, double scalar);
 
+// - OPERACAO: MATRIZ TRANSPOSTA
+Matrix* transpose_matrix(const Matrix* a);
+
 #endif 

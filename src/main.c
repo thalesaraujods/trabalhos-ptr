@@ -31,6 +31,9 @@ int main() {
     Matrix* Csub_scalar = sub_scalar_matrix(A, s2); // A - 2
     Matrix* Cmul_scalar = mul_scalar_matrix(A, s3); // A * 3
 
+    // --- matriz transposta ---
+    Matrix* T = transpose_matrix(A);
+
     printf("------- MATRIZ A -------\n");
     print_matrix(A);
     printf("\n");
@@ -64,8 +67,13 @@ int main() {
     printf("------- TESTE 6: multiplicacao por escalar -------\n");
     printf("A * %.2f:\n", s3); print_matrix(Cmul_scalar); printf("\n");
 
+    printf("------- TESTE 7: transposta da matriz A -------\n");
+    print_matrix(T);
+    printf("\n");
+
     destroy_matrix(&A); destroy_matrix(&B); destroy_matrix(&D);
     destroy_matrix(&Cadd); destroy_matrix(&Csub); destroy_matrix(&Cmul);
     destroy_matrix(&Cadd_scalar); destroy_matrix(&Csub_scalar); destroy_matrix(&Cmul_scalar);
+    destroy_matrix(&T);
     return 0;     
 }

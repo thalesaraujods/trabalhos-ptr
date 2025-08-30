@@ -184,3 +184,26 @@ Matrix* mul_scalar_matrix(const Matrix* a, double scalar) {
 
     return c;
 }
+
+// - OPERACAO: MATRIZ TRANSPOSTA
+Matrix* transpose_matrix(const Matrix* a) {
+    if (!a) {
+        fprintf(stderr, "transpose_matrix: matriz nula.\n");
+        return NULL;
+    }
+
+    // cria a transposta com dimensões invertidas
+    Matrix* t = create_matrix(a->cols, a->rows);
+    if (!t) {
+        fprintf(stderr, "transpose_matrix: falha ao alocar matriz transposta.\n");
+        return NULL;
+    }
+
+    for (int i = 0; i < a->rows; ++i) {
+        for (int j = 0; j < a->cols; ++j) {
+            t->data[j][i] = a->data[i][j];
+        }
+    }
+
+    return t;
+}
