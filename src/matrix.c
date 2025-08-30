@@ -282,3 +282,77 @@ double determinant_matrix(const Matrix* a) {
     destroy_matrix(&m);
     return det;
 }
+
+// - OPERACAO: INVERSA
+Matrix* inverse_matrix(const Matrix* a) {
+    if (!a) {
+        fprintf(stderr, "inverse_matrix: matriz nula.\n");
+        return NULL;
+    }
+    if (a->rows != a->cols) {
+        fprintf(stderr, "inverse_matrix: matriz nao quadrada (%dx%d).\n", a->rows, a->cols);
+        return NULL;
+    }
+
+    int n = a->rows;
+    const double EPS = 1e-12;
+
+    // cria matriz aumentada [A | I]
+    Matrix* aug = create_matrix(n, 2*n);
+    if (!aug) return NULL;
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            aug->data[i][j] = a->data[i][j];
+        }
+        for (int j = 0; j < n; ++j) {
+            aug->data[i][n+j] = (i == j) ? 1.0 : 0.0;
+        }
+    }
+
+    // eliminação de Gauss-Jordan
+    for (int k = 0; k < n; ++k) {
+        // pivotamento parcial
+        int p = k;
+        double best = fabs(aug->data[k][k]);
+        for (int i = k+1; i < n; ++i) {
+            double val = fabs(aug->data[i][k]);
+            if (val > best) { best = val; p = i; }
+        }
+        if (best < EPS) {
+            fprintf(stderr, "inverse_matrix: matriz singular (det=0).\n");
+            destroy_matrix(&aug);
+            return NULL;
+        }
+        if (p != k) {
+            double* tmp = aug->data[p];
+            aug->data[p] = aug->data[k];
+            aug->data[k] = tmp;
+        }
+
+        // normaliza linha pivô
+        double pivot = aug->data[k][k];
+        for (int j = 0; j < 2*n; ++j)
+            aug->data[k][j] /= pivot;
+
+        // zera as outras linhas
+        for (int i = 0; i < n; ++i) {
+            if (i == k) continue;
+            double factor = aug->data[i][k];
+            for (int j = 0; j < 2*n; ++j) {
+                aug->data[i][j] -= factor * aug->data[k][j];
+            }
+        }
+    }
+
+    // extrai a parte direita [I | A⁻¹]
+    Matrix* inv = create_matrix(n, n);
+    if (!inv) { destroy_matrix(&aug); return NULL; }
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
+            inv->data[i][j] = aug->data[i][n+j];
+
+    destroy_matrix(&aug);
+    return inv;
+}

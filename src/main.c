@@ -24,10 +24,10 @@ int main() {
     D->data[1][0]=0; D->data[1][1]=1;
     D->data[2][0]=1; D->data[2][1]=1;
 
-    // Q (DETERMINANTE 3X3)
-    Q->data[0][0]=6; Q->data[0][1]=1;  Q->data[0][2]=1;
-    Q->data[1][0]=4; Q->data[1][1]=-2; Q->data[1][2]=5;
-    Q->data[2][0]=2; Q->data[2][1]=8;  Q->data[2][2]=7;
+    // Q (DETERMINANTE 3X3 e)
+    Q->data[0][0]=2; Q->data[0][1]=1;  Q->data[0][2]=1;
+    Q->data[1][0]=1; Q->data[1][1]=3; Q->data[1][2]=2;
+    Q->data[2][0]=1; Q->data[2][1]=0;  Q->data[2][2]=0;
 
     // R (DETERMINANTE 4X4)
     double rv[] = {
@@ -53,6 +53,12 @@ int main() {
 
     // --- matriz transposta ---
     Matrix* T = transpose_matrix(A);
+
+    // --- matriz inversa ---
+    Matrix* Qinv = inverse_matrix(Q);
+
+    // --- matriz identidade a partir de Q ---
+    Matrix* I = mul_matrix(Q, Qinv);
 
     printf("\n###########################################\n");
     printf("------------TESTES COM MATRIZES------------\n");
@@ -103,6 +109,22 @@ int main() {
     printf("------- TESTE 9: determinante 4x4 -------\n");
     print_matrix(R);
     printf("det(R) = %.2f\n\n", determinant_matrix(R));
+
+    printf("------- TESTE 10: inversa de Q -------\n");
+    printf("Q:\n");
+    print_matrix(Q);
+
+    if (Qinv) {
+        printf("\nQ⁻¹:\n");
+        print_matrix(Qinv);
+        destroy_matrix(&Qinv);
+
+        printf("\nQ * Q⁻¹:\n");
+        print_matrix(I);
+        destroy_matrix(&I);
+    } else {
+        printf("Nao foi possivel inverter Q.\n");
+    }
 
     destroy_matrix(&A); destroy_matrix(&B); destroy_matrix(&D);
     destroy_matrix(&Cadd); destroy_matrix(&Csub); destroy_matrix(&Cmul);

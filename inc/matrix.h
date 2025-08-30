@@ -29,4 +29,7 @@ Matrix* transpose_matrix(const Matrix* a);
 // - OPERACAO: DETERMINANTE
 double determinant_matrix(const Matrix* a);
 
+// - OPERACAO: INVERSA
+Matrix* inverse_matrix(const Matrix* a);
+
 #endif 
