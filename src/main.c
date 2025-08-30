@@ -1,7 +1,23 @@
 #include "matrix.h"
+#include "integral.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
+/* ---------- Integrandos para os testes de Riemann ---------- */
+typedef struct { double a,b,c; } PolyCtx;  // f(x) = a*x^2 + b*x + c
+
+static double f_poly(double x, void* ctx) {
+    PolyCtx* p = (PolyCtx*)ctx;
+    return p->a*x*x + p->b*x + p->c;
+}
+
+static double f_sin(double x, void* ctx) {
+    (void)ctx;
+    return sin(x);
+}
+
 
 int main() {
     Matrix* A = create_matrix(2, 3);
@@ -9,7 +25,6 @@ int main() {
     Matrix* D = create_matrix(3, 2);
     Matrix* Q = create_matrix(3, 3);
     Matrix* R = create_matrix(4, 4);
-
 
     // A
     A->data[0][0]=1; A->data[0][1]=2; A->data[0][2]=3;
@@ -40,7 +55,6 @@ int main() {
         for (int j=0;j<4;j++)
             R->data[i][j] = rv[i*4+j];
 
-
     Matrix* Cadd = add_matrix(A, B);
     Matrix* Csub = sub_matrix(A, B);
     Matrix* Cmul = mul_matrix(A, D);
@@ -60,10 +74,7 @@ int main() {
     // --- matriz identidade a partir de Q ---
     Matrix* I = mul_matrix(Q, Qinv);
 
-    printf("\n###########################################\n");
-    printf("------------TESTES COM MATRIZES------------\n");
-    printf("###########################################\n");
-
+    printf("\n================== TESTE: Matrizes ==================\n");
 
     printf("\n------- MATRIZ A -------\n");
     print_matrix(A);
@@ -131,6 +142,20 @@ int main() {
     destroy_matrix(&Cadd_scalar); destroy_matrix(&Csub_scalar); destroy_matrix(&Cmul_scalar);
     destroy_matrix(&T);
     destroy_matrix(&Q); destroy_matrix(&R);
+
+    printf("\n================== TESTE: Integral ==================\n \n");
+    
+
+    PolyCtx q = {.a=1,.b=0,.c=0};
+    int n = 1000; 
+
+    double r1 = riemann_integral(f_poly, &q, 0.0, 1.0, n);
+    printf("∫_0^1 x^2 dx ≈ %.12f\n", r1);
+
+    double r2 = riemann_integral(f_sin, NULL, 0.0, M_PI, n);
+    printf("∫_0^π sin(x) dx ≈ %.12f\n", r2);
+
+    printf("\n===================================================\n\n");
     
     return 0;     
 }
