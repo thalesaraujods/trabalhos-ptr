@@ -207,3 +207,78 @@ Matrix* transpose_matrix(const Matrix* a) {
 
     return t;
 }
+
+// - OPERACAO: DETERMINANTE
+static Matrix* clone_matrix(const Matrix* a) {
+    if (!a) return NULL;
+    Matrix* c = create_matrix(a->rows, a->cols);
+    if (!c) return NULL;
+    for (int i = 0; i < a->rows; ++i)
+        for (int j = 0; j < a->cols; ++j)
+            c->data[i][j] = a->data[i][j];
+    return c;
+}
+
+double determinant_matrix(const Matrix* a) {
+    if (!a) {
+        fprintf(stderr, "determinant_matrix: matriz nula.\n");
+        return 0.0;
+    }
+    if (a->rows != a->cols) {
+        fprintf(stderr, "determinant_matrix: matriz nao quadrada (%dx%d).\n", a->rows, a->cols);
+        return 0.0;
+    }
+
+    const int n = a->rows;
+    const double EPS = 1e-12;
+
+    Matrix* m = clone_matrix(a);
+    if (!m) {
+        fprintf(stderr, "determinant_matrix: falha ao clonar matriz.\n");
+        return 0.0;
+    }
+
+    int swaps = 0;
+
+    for (int k = 0; k < n; ++k) {
+        /* pivotamento parcial: escolhe a maior |entrada| na coluna k, linhas k..n-1 */
+        int p = k;
+        double best = fabs(m->data[k][k]);
+        for (int i = k + 1; i < n; ++i) {
+            double val = fabs(m->data[i][k]);
+            if (val > best) { best = val; p = i; }
+        }
+
+        /* se o melhor pivô é ~0, determinante = 0 (matriz singular) */
+        if (best < EPS) {
+            destroy_matrix(&m);
+            return 0.0;
+        }
+
+        /* troca de linha se necessário */
+        if (p != k) {
+            double* tmp = m->data[p];
+            m->data[p] = m->data[k];
+            m->data[k] = tmp;
+            swaps++;
+        }
+
+        /* elimina entradas abaixo do pivô */
+        double pivot = m->data[k][k];
+        for (int i = k + 1; i < n; ++i) {
+            double factor = m->data[i][k] / pivot;
+            /* começa em k para aproveitar o zero que vai surgindo à esquerda */
+            for (int j = k; j < n; ++j) {
+                m->data[i][j] -= factor * m->data[k][j];
+            }
+        }
+    }
+
+    /* produto da diagonal = det(U); ajusta sinal pelas trocas */
+    double det = 1.0;
+    for (int i = 0; i < n; ++i) det *= m->data[i][i];
+    if (swaps % 2 != 0) det = -det;
+
+    destroy_matrix(&m);
+    return det;
+}

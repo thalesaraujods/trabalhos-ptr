@@ -26,4 +26,7 @@ Matrix* mul_scalar_matrix(const Matrix* a, double scalar);
 // - OPERACAO: MATRIZ TRANSPOSTA
 Matrix* transpose_matrix(const Matrix* a);
 
+// - OPERACAO: DETERMINANTE
+double determinant_matrix(const Matrix* a);
+
 #endif 
